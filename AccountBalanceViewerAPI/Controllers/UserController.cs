@@ -17,8 +17,8 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;        
-        private readonly JwtSettings _jwtSettings;      
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly JwtSettings _jwtSettings;
         private readonly ApplicationContext _context;
         private readonly IConfiguration Configuration;
         private readonly EmailTokenProvider<IdentityUser> _emailTokenProvider;
@@ -26,7 +26,7 @@ namespace WebApplication1.Controllers
         private readonly TokenValidationParameters _tokenValidationParameters;
 
         public UserController(UserManager<IdentityUser> userManager, JwtSettings jwtSettings, ApplicationContext context,
-            IConfiguration configuration, EmailTokenProvider<IdentityUser> emailTokenProvider, RoleManager<IdentityRole> roleManager ,
+            IConfiguration configuration, EmailTokenProvider<IdentityUser> emailTokenProvider, RoleManager<IdentityRole> roleManager,
              TokenValidationParameters tokenValidationParameters)
         {
             _userManager = userManager;
@@ -42,37 +42,26 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<ActionResult> UserRegister([FromBody] UserRegistration request)
         {
-
             try
             {
                 if (!ModelState.IsValid)
                 {
-
-                    return BadRequest( ModelState.Values.SelectMany(x => x.Errors.Select(c => c.ErrorMessage)).FirstOrDefault());
+                    return BadRequest(ModelState.Values.SelectMany(x => x.Errors.Select(c => c.ErrorMessage)).FirstOrDefault());
                 }
 
                 await using var connection = new SqlConnection(Configuration.GetConnectionString("ApplicationContextConnection"));
 
                 var existingUser = await _userManager.FindByEmailAsync(request.Email);
-
-
                 if (existingUser != null)
                 {
-
                     throw new Exception("User with this Email already exists");
-                    //await connection.ExecuteAsync("Delete From AspNetUserRoles Where UserId = @UserId", new { UserId = existingUser.Id });
-                    //await connection.ExecuteAsync("Delete From RefreshToken Where UserId = @UserId", new { UserId = existingUser.Id });
-                    //await _userManager.DeleteAsync(existingUser);
-
                 }
 
                 var newUser = new IdentityUser
                 {
                     Email = request.Email,
-                    UserName = request.UserName,              
-                    
+                    UserName = request.UserName,
                 };
-
 
                 if (request.Type == "admin")
                 {
@@ -80,53 +69,36 @@ namespace WebApplication1.Controllers
                     if (isRoleExist == null)
                     {
                         await _roleManager.CreateAsync(new IdentityRole("Admin"));
-
                     }
 
                     var createdUser = await _userManager.CreateAsync(newUser, request.Password);
-
-                   
-
                     if (!createdUser.Succeeded)
                     {
-
                         throw new Exception(createdUser.Errors.Select(x => x.Description).FirstOrDefault());
-
                     }
-
                     await _userManager.AddToRoleAsync(newUser, "Admin");
-
-
-                }else if (request.Type == "user")
-                 {
+                }
+                else if (request.Type == "user")
+                {
                     var isRoleExist = await _roleManager.FindByNameAsync("User");
                     if (isRoleExist == null)
                     {
                         await _roleManager.CreateAsync(new IdentityRole("User"));
-
                     }
 
                     var createdUser = await _userManager.CreateAsync(newUser, request.Password);
 
-                    
-
                     if (!createdUser.Succeeded)
                     {
-
                         throw new Exception(createdUser.Errors.Select(x => x.Description).FirstOrDefault());
-
                     }
-
                     await _userManager.AddToRoleAsync(newUser, "User");
                 }
-
-                    return Ok("Registration successful");
-
+                return Ok("Registration successful");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-
             }
         }
 
@@ -144,7 +116,7 @@ namespace WebApplication1.Controllers
                     throw new Exception("User does not exist");
                 }
 
-               
+
                 var userValidPassword = await _userManager.CheckPasswordAsync(User, request.Password);
 
                 if (!userValidPassword)
@@ -164,7 +136,7 @@ namespace WebApplication1.Controllers
 
                 HttpContext.Response.Cookies.Append("Token", usertokens.Token);
 
-               
+
 
                 // HttpContext.Response.Cookies.Append("RefreshToken", authResponse.RefreshToken);
 
@@ -183,7 +155,7 @@ namespace WebApplication1.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest( ex.Message);
+                return BadRequest(ex.Message);
 
             }
         }
@@ -194,7 +166,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                
+
 
                 var storedrefreshToken = _context.RefreshToken.SingleOrDefault(x => x.Token == request.RefreshToken);
 
@@ -233,7 +205,7 @@ namespace WebApplication1.Controllers
 
                 }
 
-                
+
 
                 storedrefreshToken.Revoked = DateTime.UtcNow;
                 storedrefreshToken.Used = true;
@@ -360,7 +332,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-               foreach(var item in request)
+                foreach (var item in request)
                 {
                     //var userId = _userManager.FindByNameAsync(item.Name).Result.Id;
 
