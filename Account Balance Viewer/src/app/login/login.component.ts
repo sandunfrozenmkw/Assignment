@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ILoginModel } from '../models/loginModel';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
@@ -29,7 +30,12 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     const { username, password } = this.form;
 
-    this.authService.login(username, password).subscribe(
+    let loginRequest = <ILoginModel>{
+      email:username,
+      password: password
+    }; 
+
+    this.authService.login(loginRequest).subscribe(
       data => {
         this.tokenStorage.saveToken(data.accessToken);
         this.tokenStorage.saveUser(data);
