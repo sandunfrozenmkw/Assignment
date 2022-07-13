@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ApplicationContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationContextConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseSqlServer(connectionString));;
+    options.UseSqlServer(connectionString)); ;
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
@@ -38,6 +38,7 @@ var tokenValidationParameters = new TokenValidationParameters
     ClockSkew = TimeSpan.Zero
 
 };
+
 builder.Services.AddSingleton(tokenValidationParameters);
 builder.Services.AddAuthentication(x =>
 {
@@ -51,17 +52,14 @@ builder.Services.AddAuthentication(x =>
       x.TokenValidationParameters = tokenValidationParameters;
   });
 
-
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "WebApp1",
+        Title = "Account Balance Viewer API",
 
     });
 
@@ -73,7 +71,6 @@ builder.Services.AddSwaggerGen(c =>
                                 Reference = new OpenApiReference
                                 {
                                     Type = ReferenceType.SecurityScheme,
-                                    //Id = "bearerAuth"
                                      Id= "Bearer"
                                 }
                             },
@@ -96,7 +93,6 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -104,12 +100,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
