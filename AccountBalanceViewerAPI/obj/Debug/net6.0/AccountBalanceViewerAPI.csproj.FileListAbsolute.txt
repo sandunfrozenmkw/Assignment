@@ -268,8 +268,6 @@ D:\Sandun\Projects\Assignment\AccountBalanceViewerAPI\obj\Debug\net6.0\AccountBa
 D:\Sandun\Projects\Assignment\AccountBalanceViewerAPI\obj\Debug\net6.0\AccountBalanceViewerAPI.csproj.CoreCompileInputs.cache
 D:\Sandun\Projects\Assignment\AccountBalanceViewerAPI\obj\Debug\net6.0\AccountBalanceViewerAPI.MvcApplicationPartsAssemblyInfo.cs
 D:\Sandun\Projects\Assignment\AccountBalanceViewerAPI\obj\Debug\net6.0\AccountBalanceViewerAPI.MvcApplicationPartsAssemblyInfo.cache
-D:\Sandun\Projects\Assignment\AccountBalanceViewerAPI\obj\Debug\net6.0\AccountBalanceViewerAPI.RazorAssemblyInfo.cache
-D:\Sandun\Projects\Assignment\AccountBalanceViewerAPI\obj\Debug\net6.0\AccountBalanceViewerAPI.RazorAssemblyInfo.cs
 D:\Sandun\Projects\Assignment\AccountBalanceViewerAPI\obj\Debug\net6.0\staticwebassets.build.json
 D:\Sandun\Projects\Assignment\AccountBalanceViewerAPI\obj\Debug\net6.0\staticwebassets.development.json
 D:\Sandun\Projects\Assignment\AccountBalanceViewerAPI\obj\Debug\net6.0\scopedcss\bundle\AccountBalanceViewerAPI.styles.css
