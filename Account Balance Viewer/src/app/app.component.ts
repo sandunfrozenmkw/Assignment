@@ -20,12 +20,12 @@ export class AppComponent {
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
-      this.roles = user.roles;
+      this.roles = user.role;
 
-      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      this.showAdminBoard = this.roles.includes('Admin');
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
 
-      this.username = user.username;
+      this.username = user.user.userName;
     }
   }
 

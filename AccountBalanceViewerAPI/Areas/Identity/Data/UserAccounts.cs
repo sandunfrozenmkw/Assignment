@@ -12,9 +12,7 @@
 
     public class UploadDataDto
     {
-        public string Name { get; set; }
-        public string Amount { get; set; }
-        public string Identifier { get; set; }
+        public List<string> DataColumns { get; set;}
     }
 
     public class AccountData

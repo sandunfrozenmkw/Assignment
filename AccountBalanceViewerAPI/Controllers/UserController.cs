@@ -334,35 +334,32 @@ namespace WebApplication1.Controllers
             {
                 foreach (var item in request)
                 {
-                    //var userId = _userManager.FindByNameAsync(item.Name).Result.Id;
+                    if (item.DataColumns.Count != 2) {
+                        continue;
+                    }
 
                     var account = new UserAccounts
                     {
                         Id = Guid.NewGuid().ToString(),
-                        Name = item.Name,
+                        Name = item.DataColumns[0],
                         Date = DateTime.Now,
-                        Amount = item.Amount,
-                        Identifier = item.Identifier,
+                        Amount = item.DataColumns[1],
+                        Identifier = "Identifier",
                         UserId = "44"
                     };
 
                     await _context.UserAccounts.AddAsync(account);
                     await _context.SaveChangesAsync();
                 }
-
-
                 return Ok();
-
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-
             }
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Admin")]
         [Route("GetAccountBalances")]
         [HttpGet]
         public async Task<ActionResult> GetAccountBalances()
