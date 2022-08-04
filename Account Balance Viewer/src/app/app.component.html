@@ -3,16 +3,13 @@
     <a href="#" class="navbar-brand">Account Balance Viewer</a>
     <ul class="navbar-nav mr-auto" routerLinkActive="active">
       <li class="nav-item" *ngIf="showAdminBoard">
-        <a href="/home" class="nav-link" routerLink="home">Upload Account Balances </a>
+        <a href="/upload" class="nav-link" routerLink="upload">Upload Account Balances </a>
       </li>
       <li class="nav-item" *ngIf="showAdminBoard">
-        <a href="/admin" class="nav-link" routerLink="admin">Display Account Balance</a>
+        <a href="/display" class="nav-link" routerLink="display">Display Account Balance</a>
       </li>
-      <li class="nav-item" *ngIf="showModeratorBoard">
-        <a href="/mod" class="nav-link" routerLink="mod">Account Balance Report</a>
-      </li>
-      <li class="nav-item">
-        <a href="/user" class="nav-link" *ngIf="isLoggedIn" routerLink="user">User</a>
+      <li class="nav-item" *ngIf="showAdminBoard">
+        <a href="/reports" class="nav-link" *ngIf="isLoggedIn" routerLink="reports">Reports</a>
       </li>
     </ul>
 

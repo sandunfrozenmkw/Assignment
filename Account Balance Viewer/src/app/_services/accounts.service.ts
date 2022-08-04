@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IUploadDataModel } from '../models/uploadDataModel';
 import { ILoginModel } from '../models/loginModel';
+import { IAccountDataModel } from '../models/accountDataModel';
 
 const API_URL = 'http://localhost:8080/api/test/';
 const httpOptions = {
@@ -17,8 +18,8 @@ const httpOptions = {
 export class AccountsService {
   constructor(private http: HttpClient) { }
 
-  getGetAccountBalances(): Observable<any> {
-    return this.http.get(environment.baseApiUrl + 'api/User/GetAccountBalances', { responseType: 'text' });
+  getGetAccountBalances(): Observable<IAccountDataModel[]> {
+    return this.http.get<IAccountDataModel[]>(environment.baseApiUrl + 'api/User/GetAccountBalances');
   }
 
   uploadData(request: IUploadDataModel[]): Observable<any> {

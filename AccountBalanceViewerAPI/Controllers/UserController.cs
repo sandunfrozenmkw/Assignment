@@ -338,6 +338,9 @@ namespace WebApplication1.Controllers
                         continue;
                     }
 
+                    List<UserAccounts> prevousRecords = new List<UserAccounts>();
+
+
                     var account = new UserAccounts
                     {
                         Id = Guid.NewGuid().ToString(),

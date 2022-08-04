@@ -7,17 +7,17 @@ import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-accounts-upload',
+  templateUrl: './accounts-upload.component.html',
+  styleUrls: ['./accounts-upload.component.css']
 })
-export class HomeComponent implements OnInit {
+export class AccountsUploadComponent implements OnInit {
   content?: string;
   arrayBuffer: any;
   file: File;
   data!: [][];
   errorMessage = '';
-  isLoginFailed = false;
+  isUploadFailed = false;
   uploadData: IUploadDataModel[] = [];
 
   constructor(private accountsService: AccountsService, private router: Router) {
@@ -65,11 +65,13 @@ export class HomeComponent implements OnInit {
     this.accountsService.uploadData(this.uploadData).subscribe(
       data => {
         alert("Data Successfully Uploaded...!!!");
-        this.router.navigate(['admin']);
+        
+        this.router.navigate(['upload']);
+        this.isUploadFailed = false;
       },
       err => {
-        this.errorMessage = err.error.message;
-        this.isLoginFailed = true;
+        this.errorMessage = "Error Occoured while uploading file...";
+        this.isUploadFailed = true;
       }
     );
   }

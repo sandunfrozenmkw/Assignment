@@ -1,0 +1,23 @@
+<div class="container">
+  <header class="jumbotron">
+    <h2>Balances as of March 2017</h2>
+  </header>
+
+  <table>
+    <thead>
+        <tr>
+            <th *ngFor="let account of accountData">
+              {{account.name}}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <th *ngFor="let account of accountData">
+            {{account.amount}}
+          </th>
+        </tr>
+    </tbody>
+</table>
+
+</div>
