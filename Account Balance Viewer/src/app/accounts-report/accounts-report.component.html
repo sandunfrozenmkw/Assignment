@@ -1,5 +1,8 @@
-<div class="container">
-  <header class="jumbotron">
-    <p>{{ content }}</p>
-  </header>
+<div class="flex">
+  <div class="flex-item">
+    <div class="chart-wrapper" *ngIf="chartDataReady">
+      <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+        [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+    </div>
+  </div>
 </div>

@@ -112,34 +112,21 @@ namespace WebApplication1.Controllers
 
                 if (User == null)
                 {
-
                     throw new Exception("User does not exist");
                 }
 
-
                 var userValidPassword = await _userManager.CheckPasswordAsync(User, request.Password);
-
                 if (!userValidPassword)
                 {
-
                     throw new Exception("User/Password combination is wrong");
-
                 }
 
                 await using var connection = new SqlConnection(Configuration.GetConnectionString("ApplicationContextConnection"));
 
-
                 var userRoles = await _userManager.GetRolesAsync(User);
                 var usertokens = await GenerateAuthenticationResultsForUser(User, userRoles);
 
-
-
                 HttpContext.Response.Cookies.Append("Token", usertokens.Token);
-
-
-
-                // HttpContext.Response.Cookies.Append("RefreshToken", authResponse.RefreshToken);
-
 
                 return Ok(new UserLoginResults
                 {
@@ -148,15 +135,11 @@ namespace WebApplication1.Controllers
                     Token = usertokens.Token,
                     RefreshToken = usertokens.RefreshToken,
                     TokenExpireDate = usertokens.TokenExpireDate,
-
                 });
-
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-
             }
         }
 
@@ -166,69 +149,47 @@ namespace WebApplication1.Controllers
         {
             try
             {
-
-
                 var storedrefreshToken = _context.RefreshToken.SingleOrDefault(x => x.Token == request.RefreshToken);
-
                 if (storedrefreshToken == null)
                 {
-
                     throw new Exception("This refresh token does not exist");
-
-
                 }
 
                 if (DateTime.UtcNow > storedrefreshToken.ExpiryDate)
                 {
-
                     throw new Exception("This refresh token has expired");
-
                 }
 
                 if (storedrefreshToken.Invalidated)
                 {
-
                     throw new Exception("This refresh token has been invalidated");
-
                 }
                 if (!storedrefreshToken.IsActive)
                 {
-
                     throw new Exception("This refresh token has been Revoked");
-
                 }
 
                 if (storedrefreshToken.Used)
                 {
-
                     throw new Exception("This refresh token has been used");
-
                 }
-
-
 
                 storedrefreshToken.Revoked = DateTime.UtcNow;
                 storedrefreshToken.Used = true;
                 _context.RefreshToken.Update(storedrefreshToken);
                 await _context.SaveChangesAsync();
 
-                // var user = await _userManager.FindByIdAsync(validateToken.Claims.Single(x => x.Type == "id").Value);
                 var user = await _userManager.FindByIdAsync(storedrefreshToken.UserId);
                 var userRoles = await _userManager.GetRolesAsync(user);
-
                 var result = await GenerateAuthenticationResultsForUser(user, userRoles);
 
                 HttpContext.Response.Cookies.Append("Token", result.Token);
-                // HttpContext.Response.Cookies.Append("RefreshToken", authResponse.RefreshToken);
 
                 return Ok(result);
-
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-
             }
         }
 
@@ -244,11 +205,7 @@ namespace WebApplication1.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
                     new Claim("id", newUser.Id),
-                   // new Claim(ClaimTypes.Role, roles[0])
-
-
                 }),
-
 
                 Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifeTime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
@@ -259,8 +216,6 @@ namespace WebApplication1.Controllers
                 tokenDescriptor.Subject.AddClaim(new Claim(ClaimTypes.Role, userRole));
 
             }
-
-            // AddRolesToClaims(newUser, roles);
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
@@ -285,9 +240,6 @@ namespace WebApplication1.Controllers
                 };
             }
             var expiryDateUnix = long.Parse(validateToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-
-            //var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-            //    .AddSeconds(expiryDateUnix);
 
             return new AuthenticationResult
             {
@@ -332,14 +284,17 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                int count = request.ToList<UploadDataDto>().Count;
+                if (count > 0) {
+                    _context.UserAccounts.RemoveRange(_context.UserAccounts.Where(x => x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year));
+                    await _context.SaveChangesAsync();
+                }
+
                 foreach (var item in request)
                 {
                     if (item.DataColumns.Count != 2) {
                         continue;
                     }
-
-                    List<UserAccounts> prevousRecords = new List<UserAccounts>();
-
 
                     var account = new UserAccounts
                     {
@@ -370,18 +325,12 @@ namespace WebApplication1.Controllers
             try
             {
                 var data = _context.UserAccounts.AsEnumerable();
-
                 data = data.Where(x => x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year);
-
-
                 return Ok(data);
-
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-
             }
         }
 
@@ -393,29 +342,22 @@ namespace WebApplication1.Controllers
             try
             {
                 var data = _context.UserAccounts.AsEnumerable();
-
                 var orderData = data.GroupBy(x => x.Name);
-
                 var result = new List<AccountData>();
 
                 foreach (var item in orderData)
                 {
                     var account = new AccountData();
                     account.Account = item.Key;
-                    account.Data = item.OrderByDescending(x => x.Date).ToList();
+                    account.Amount = item.OrderByDescending(x => x.Date).Select(x=>x.Amount).ToList();
 
                     result.Add(account);
                 }
-
-
                 return Ok(result);
-
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-
             }
         }
     }

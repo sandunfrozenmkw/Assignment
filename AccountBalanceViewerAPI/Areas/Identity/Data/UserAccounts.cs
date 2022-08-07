@@ -18,7 +18,7 @@
     public class AccountData
     {
         public string Account { get; set; }
-        public List<UserAccounts> Data { get; set; }
+        public List<string> Amount { get; set; }
         
     }
 }
