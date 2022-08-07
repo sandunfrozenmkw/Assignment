@@ -9,12 +9,14 @@ import { AccountsDisplayComponent } from './accounts-display/accounts-display.co
 import { AccountsReportComponent } from './accounts-report/accounts-report.component';
 
 const routes: Routes = [
-  { path: 'upload', component: AccountsUploadComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: 'reports', component: AccountsReportComponent },
+
+  { path: 'upload', component: AccountsUploadComponent },
   { path: 'display', component: AccountsDisplayComponent },
+  { path: 'reports', component: AccountsReportComponent },
+
   { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 

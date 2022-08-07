@@ -6,16 +6,16 @@
   </header>
   <p>
     <strong>Token:</strong>
-    {{ currentUser.accessToken.substring(0, 20) }} ...
-    {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
+    {{ currentUser.token.substring(0, 20) }} ...
+    {{ currentUser.token.substr(currentUser.token.length - 20) }}
   </p>
   <p>
     <strong>Email:</strong>
-    {{ currentUser.email }}
+    {{ currentUser.user.email }}
   </p>
   <strong>Roles:</strong>
   <ul>
-    <li *ngFor="let role of currentUser.roles">
+    <li *ngFor="let role of currentUser.role">
       {{ role }}
     </li>
   </ul>

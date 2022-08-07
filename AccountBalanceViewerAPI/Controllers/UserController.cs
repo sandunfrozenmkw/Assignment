@@ -317,7 +317,6 @@ namespace WebApplication1.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
         [Route("GetAccountBalances")]
         [HttpGet]
         public async Task<ActionResult> GetAccountBalances()

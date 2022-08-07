@@ -11,7 +11,6 @@ import { AccountsUploadComponent } from './accounts-upload/accounts-upload.compo
 import { ProfileComponent } from './profile/profile.component';
 import { AccountsDisplayComponent } from './accounts-display/accounts-display.component';
 import { AccountsReportComponent } from './accounts-report/accounts-report.component'
-import { BoardUserComponent } from './board-user/board-user.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { ChartsModule } from 'ng2-charts';
@@ -24,8 +23,7 @@ import { ChartsModule } from 'ng2-charts';
     AccountsUploadComponent,
     ProfileComponent,
     AccountsDisplayComponent,
-    AccountsReportComponent,
-    BoardUserComponent
+    AccountsReportComponent
   ],
   imports: [
     BrowserModule,

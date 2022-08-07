@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../_services/user.service';
 import * as XLSX from 'xlsx';
 import { AccountsService } from '../_services/accounts.service';
 import { IUploadDataModel } from '../models/uploadDataModel';

@@ -18,13 +18,6 @@ const httpOptions = {
 export class AuthService {
   constructor(private http: HttpClient) { }
 
-  // public Login(request: ILoginModel): Observable<any> {
-  //   return this.http.postAnonymous<any, ILoginModel>('api/User/UserLogin', request).pipe(
-  //     catchError(this.handleError)
-  //   );
-  // }
-
-
   login(request: ILoginModel): Observable<any> {
     return this.http.post(environment.baseApiUrl + 'api/User/UserLogin', 
     request, httpOptions);
