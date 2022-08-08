@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseApiUrl: 'http://localhost:13588/'
+  baseApiUrl: 'https://accountbalanceviewerapinew.azurewebsites.net/'
 };
