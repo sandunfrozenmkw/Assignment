@@ -21,19 +21,17 @@ namespace WebApplication1.Controllers
         private readonly JwtSettings _jwtSettings;
         private readonly ApplicationContext _context;
         private readonly IConfiguration Configuration;
-        private readonly EmailTokenProvider<IdentityUser> _emailTokenProvider;
         private RoleManager<IdentityRole> _roleManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
 
         public UserController(UserManager<IdentityUser> userManager, JwtSettings jwtSettings, ApplicationContext context,
-            IConfiguration configuration, EmailTokenProvider<IdentityUser> emailTokenProvider, RoleManager<IdentityRole> roleManager,
+            IConfiguration configuration, RoleManager<IdentityRole> roleManager,
              TokenValidationParameters tokenValidationParameters)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _context = context;
             Configuration = configuration;
-            _emailTokenProvider = emailTokenProvider;
             _roleManager = roleManager;
             _tokenValidationParameters = tokenValidationParameters;
         }
@@ -141,57 +139,7 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        [Route("RefreshToken")]
-        [HttpPost]
-        public async Task<ActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
-        {
-            try
-            {
-                var storedrefreshToken = _context.RefreshToken.SingleOrDefault(x => x.Token == request.RefreshToken);
-                if (storedrefreshToken == null)
-                {
-                    throw new Exception("This refresh token does not exist");
-                }
-
-                if (DateTime.UtcNow > storedrefreshToken.ExpiryDate)
-                {
-                    throw new Exception("This refresh token has expired");
-                }
-
-                if (storedrefreshToken.Invalidated)
-                {
-                    throw new Exception("This refresh token has been invalidated");
-                }
-                if (!storedrefreshToken.IsActive)
-                {
-                    throw new Exception("This refresh token has been Revoked");
-                }
-
-                if (storedrefreshToken.Used)
-                {
-                    throw new Exception("This refresh token has been used");
-                }
-
-                storedrefreshToken.Revoked = DateTime.UtcNow;
-                storedrefreshToken.Used = true;
-                _context.RefreshToken.Update(storedrefreshToken);
-                await _context.SaveChangesAsync();
-
-                var user = await _userManager.FindByIdAsync(storedrefreshToken.UserId);
-                var userRoles = await _userManager.GetRolesAsync(user);
-                var result = await GenerateAuthenticationResultsForUser(user, userRoles);
-
-                HttpContext.Response.Cookies.Append("Token", result.Token);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        }               
 
         private async Task<AuthenticationResult> GenerateAuthenticationResultsForUser(IdentityUser newUser, IList<string> roles)
         {
@@ -274,90 +222,6 @@ namespace WebApplication1.Controllers
             return (validateToken is JwtSecurityToken jwtSecurityToken) &&
                     jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                     StringComparison.InvariantCultureIgnoreCase);
-        }
-
-
-        [Authorize(Roles = "Admin")]
-        [Route("UploadData")]
-        [HttpPost]
-        public async Task<ActionResult> UploadData([FromBody] IEnumerable<UploadDataDto> request)
-        {
-            try
-            {
-                int count = request.ToList<UploadDataDto>().Count;
-                if (count > 0) {
-                    _context.UserAccounts.RemoveRange(_context.UserAccounts.Where(x => x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year));
-                    await _context.SaveChangesAsync();
-                }
-
-                foreach (var item in request)
-                {
-                    if (item.DataColumns.Count != 2) {
-                        continue;
-                    }
-
-                    var account = new UserAccounts
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Name = item.DataColumns[0],
-                        Date = DateTime.Now,
-                        Amount = item.DataColumns[1],
-                        Identifier = null,
-                        UserId = null
-                    };
-
-                    await _context.UserAccounts.AddAsync(account);
-                    await _context.SaveChangesAsync();
-                }
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [Route("GetAccountBalances")]
-        [HttpGet]
-        public async Task<ActionResult> GetAccountBalances()
-        {
-            try
-            {
-                var data = _context.UserAccounts.AsEnumerable();
-                data = data.Where(x => x.Date.Value.Month == DateTime.Now.Month && x.Date.Value.Year == DateTime.Now.Year);
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [Authorize(Roles = "Admin")]
-        [Route("GetReport")]
-        [HttpGet]
-        public async Task<ActionResult> GetReport()
-        {
-            try
-            {
-                var data = _context.UserAccounts.AsEnumerable();
-                var orderData = data.GroupBy(x => x.Name);
-                var result = new List<AccountData>();
-
-                foreach (var item in orderData)
-                {
-                    var account = new AccountData();
-                    account.Account = item.Key;
-                    account.Amount = item.OrderByDescending(x => x.Date).Select(x=>x.Amount).ToList();
-
-                    result.Add(account);
-                }
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }
     }
 }

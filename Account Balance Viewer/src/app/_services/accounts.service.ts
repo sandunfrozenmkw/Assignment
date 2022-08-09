@@ -20,14 +20,14 @@ export class AccountsService {
   constructor(private http: HttpClient) { }
 
   uploadData(request: IUploadDataModel[]): Observable<any> {
-    return this.http.post(environment.baseApiUrl + 'api/User/UploadData', request, httpOptions);
+    return this.http.post(environment.baseApiUrl + 'api/Account/UploadData', request, httpOptions);
   }
 
   getGetAccountBalances(): Observable<IAccountDataModel[]> {
-    return this.http.get<IAccountDataModel[]>(environment.baseApiUrl + 'api/User/GetAccountBalances');
+    return this.http.get<IAccountDataModel[]>(environment.baseApiUrl + 'api/Account/GetAccountBalances');
   }
 
   getReport():Observable<IReportDataModel[]>{
-    return this.http.get<IReportDataModel[]>(environment.baseApiUrl + 'api/User/GetReport');
+    return this.http.get<IReportDataModel[]>(environment.baseApiUrl + 'api/Account/GetReport');
   }
 }
