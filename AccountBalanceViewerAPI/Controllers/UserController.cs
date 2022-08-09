@@ -302,8 +302,8 @@ namespace WebApplication1.Controllers
                         Name = item.DataColumns[0],
                         Date = DateTime.Now,
                         Amount = item.DataColumns[1],
-                        Identifier = "Identifier",
-                        UserId = "44"
+                        Identifier = null,
+                        UserId = null
                     };
 
                     await _context.UserAccounts.AddAsync(account);
