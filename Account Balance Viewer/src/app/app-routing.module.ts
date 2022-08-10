@@ -12,7 +12,6 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
-
   { path: 'upload', component: AccountsUploadComponent },
   { path: 'display', component: AccountsDisplayComponent },
   { path: 'reports', component: AccountsReportComponent },

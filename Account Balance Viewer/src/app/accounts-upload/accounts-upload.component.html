@@ -3,7 +3,7 @@
   <header class="jumbotron">
     <h2>Please upload account balance for this month</h2>
   </header>
-<br>
+  <br>
   <div class="form-group">
     <input type="file" class="form-control" (change)="onFileChange($event)" multiple="false" />
   </div>
@@ -15,7 +15,7 @@
         </td>
       </tr>
     </tbody>
-  </table>  
+  </table>
   <br>
   <div class="form-group">
     <button (click)="uploadAccountData($event)" [disabled]="!uploadData || uploadData.length === 0"

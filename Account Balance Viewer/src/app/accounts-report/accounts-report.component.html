@@ -1,10 +1,10 @@
 <div class="flex">
-<br>
-<header class="jumbotron">
-  <h2 style="align-content:Center;">Report - Account Balance Change Over</h2>
-</header>
-<br>
-<br>
+  <br>
+  <header class="jumbotron">
+    <h2 style="align-content:Center;">Account Balance Monthly Report</h2>
+  </header>
+  <br>
+  <br>
   <div class="flex-item">
     <div class="chart-wrapper" *ngIf="chartDataReady">
       <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"

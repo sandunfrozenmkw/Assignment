@@ -10,13 +10,12 @@ import { AccountsService } from '../_services/accounts.service';
 export class AccountsDisplayComponent implements OnInit {
   errorMessage = '';
   isLoadingFailed = false;
-  accountData : IAccountDataModel[] =[];
+  accountData: IAccountDataModel[] = [];
   year: number = new Date().getFullYear();
   monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+    "July", "August", "September", "October", "November", "December"
   ];
   monthName = "";
-
 
   constructor(private accountsService: AccountsService) { }
 

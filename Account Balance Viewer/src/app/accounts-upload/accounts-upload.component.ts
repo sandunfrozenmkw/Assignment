@@ -20,18 +20,14 @@ export class AccountsUploadComponent implements OnInit {
   uploadData: IUploadDataModel[] = [];
 
   constructor(private accountsService: AccountsService, private router: Router) {
-
   }
 
   ngOnInit(): void {
-
   }
 
   onFileChange(evt: any) {
     const target: DataTransfer = <DataTransfer>(evt.target);
-
     if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-
     const reader: FileReader = new FileReader();
 
     reader.onload = (e: any) => {
@@ -64,7 +60,7 @@ export class AccountsUploadComponent implements OnInit {
     this.accountsService.uploadData(this.uploadData).subscribe(
       data => {
         alert("Data Successfully Uploaded...!!!");
-        
+
         this.router.navigate(['upload']);
         this.isUploadFailed = false;
       },

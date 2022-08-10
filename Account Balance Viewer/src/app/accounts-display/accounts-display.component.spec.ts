@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AccountsDisplayComponent } from './accounts-display.component';
 
-describe('BoardAdminComponent', () => {
+describe('AccountsDisplayComponent', () => {
   let component: AccountsDisplayComponent;
   let fixture: ComponentFixture<AccountsDisplayComponent>;
 
